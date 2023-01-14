@@ -100,7 +100,7 @@ function unblockip_output($vars) {
   }
 
    echo '
-<h4>Search cPanel and DirectAdmin servers for a csf firewall block.</h4>
+<h4>Query your Servers for a CSF Blockage of an IP Address.</h4>
 <form action="'.$modulelink.'" method="POST">
 <table class="form" width="80%" border="0" cellspacing="2" cellpadding="3">
 <tr><td class="fieldlabel">Debug Mode</td><td class="fieldarea">
@@ -109,7 +109,7 @@ function unblockip_output($vars) {
 <tr><td class="fieldlabel">Server</td><td class="fieldarea">
 
 <select name="server_id">
-<option value="all">Search all active cPanel and DirectAdmin Servers</option>
+<option value="all">Search all active Compatible Servers</option>
 
 ';
   
@@ -129,7 +129,7 @@ echo
 </table>
 <br>
 <input type="hidden" name="action" value="unblock">
-<input type="submit" name="submit" value="Search for and Unblock IP">
+<input type="submit" name="submit" value="Search and Unblock">
 </form>';
 
  
