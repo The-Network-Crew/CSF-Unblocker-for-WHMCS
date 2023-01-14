@@ -36,3 +36,7 @@ This extension provides the ability to self-service Unblock IPs from within WHMC
 - WHMCS 5.0.3 or later
 - cPanel properly configured in WHMCS
 - CSF 5.40 or later
+
+### CSF Implementation Method
+
+- cpsess##########/cgi/configserver/csf.cgi?action=kill&ip=103.103.103.103
