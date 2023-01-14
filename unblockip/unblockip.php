@@ -1,25 +1,27 @@
 <?php
+// WHMCS CSF Unblocker - unblockip.php
 use Illuminate\Database\Capsule\Manager as Capsule;	
 require_once  dirname(__FILE__) . "/functions.php";
 
 function unblockip_config() {
 	$configarray = array(
-	"name" => "CSF Unblock IP",
-	"description" => "Allows clients to unblock an IP that has been blocked on a cPanel or DirectAdmin server by CSF.",
-	"version" => "2.17",
-	"author" => "The Network Crew Pty Ltd",
-	"language" => "english",
-	"fields" => array(
-		"option1" => array ("FriendlyName" => "Max recent unblocks", "Type" => "text", "Size" => "5", "Description" => "Max unblocks a user can requests in the time period specified in the Minute interval option.", "Default" => "5", ),
-		"option2" => array ("FriendlyName" => "Minute interval", "Type" => "text", "Size" => "5", "Description" => "How may minutes does a client need to wait before the max unblocks is reset.", "Default" => "5"),
-		"option3" => array ("FriendlyName" => "Automatically check for an IP Block upon client login and unblock the ip address.", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
-		"option5" => array ("FriendlyName" => "Automatically check for an IP Block upon client login but do not unblock the ip", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
-		"option4" => array ("FriendlyName" => "Do not allow clients to remove ip addresses with do not delete in the deny comment", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "", ),
-	));
+		"name" => "CSF Unblock IP",
+		"description" => "Allows clients to unblock an IP that has been blocked on a cPanel or DirectAdmin server by CSF.",
+		"version" => "2.17",
+		"author" => "The Network Crew Pty Ltd",
+		"language" => "english",
+		"fields" => array(
+			"option1" => array ("FriendlyName" => "Max recent unblocks", "Type" => "text", "Size" => "5", "Description" => "Max unblocks a user can requests in the time period specified in the Minute interval option.", "Default" => "5", ),
+			"option2" => array ("FriendlyName" => "Minute interval", "Type" => "text", "Size" => "5", "Description" => "How may minutes does a client need to wait before the max unblocks is reset.", "Default" => "5"),
+			"option3" => array ("FriendlyName" => "Automatically check for an IP Block upon client login and unblock the ip address.", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
+			"option5" => array ("FriendlyName" => "Automatically check for an IP Block upon client login but do not unblock the ip", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
+			"option4" => array ("FriendlyName" => "Do not allow clients to remove ip addresses with do not delete in the deny comment", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "", ),
+		));
 	return $configarray;
 }
 
 function unblockip_clientarea($vars) {
+	global $client;
 	$modulelink = $vars['modulelink'];
 	$max_unblocks = (int)$vars['option1'];
 	$unblock_interval = (int)$vars['option2'];
@@ -34,7 +36,7 @@ function unblockip_clientarea($vars) {
 		$unblock_interval = 5;
 	}
 
-	$whmcs_client_id = (int)$_SESSION['uid'];
+	$whmcs_client_id = $client['clientid'];
 	$templatefile = "unblockip";
 
 	if ($whmcs_client_id) { 
@@ -56,7 +58,6 @@ function unblockip_clientarea($vars) {
 		'requirelogin' => true, # or false
 		'vars' => $smartyvalues,
 	);
-
 }
 
 
