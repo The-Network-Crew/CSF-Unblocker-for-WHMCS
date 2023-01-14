@@ -106,6 +106,7 @@ function excecute_whm_csf_command($url,$whmuser, $whmauth, $authmethod, $ipaddre
   }
 }
 
+// CSF GREP - Via GUI, this is run firstly, and an unblock attempted only if GREP=match
 function search_for_ip($ip, $url, $whmuser, $whmauth, $authmethod, $_lang, $srv_ip, $debug = false) {
     $reason = "";
 	$query_url = $url.'?action=grep&ip='.$ip;
@@ -115,7 +116,7 @@ function search_for_ip($ip, $url, $whmuser, $whmauth, $authmethod, $_lang, $srv_
 	}
 	
 	$matches = array();
-	$pattern = '/pre.*>(.*)<\/pre>/s';
+	$pattern = '/.*<td>(.*)<\/td>.*/s';
 	preg_match($pattern, $data, $matches);
 
 	$pattern = '/Temporary Blocks/';
@@ -187,6 +188,7 @@ function number_of_recent_unblocks($whmcs_client_id, $unblock_interval) {
   return Capsule::table('tblactivitylog')->where('userid', $whmcs_client_id)->whereRaw('(date between DATE_SUB(now(), interval '. $unblock_interval .' minute) and now())')->whereRaw('description LIKE \'%Unblocked the IP Address%\'')->count();
 }
 
+// CSF UNBLOCK - ie. kill or qkill action - Only executed if GREP=match
 function process_request($ip,$whmcs_client_id, $max_recent_blocks, $unblock_interval, $from_hook, $vars, $unblock = true) {
 
 	$errors = "";
