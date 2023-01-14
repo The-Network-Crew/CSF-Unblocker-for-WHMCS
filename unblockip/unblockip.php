@@ -4,10 +4,10 @@ require_once  dirname(__FILE__) . "/functions.php";
 
 function unblockip_config() {
     $configarray = array(
-    "name" => "UnBlockIp",
+    "name" => "CSF Unblock IP",
     "description" => "Allows clients to unblock an IP that has been blocked on a cPanel or DirectAdmin server by CSF.",
     "version" => "2.17",
-    "author" => "ServerPing.net",
+    "author" => "The Network Crew Pty Ltd",
     "language" => "english",
     "fields" => array(
         "option1" => array ("FriendlyName" => "Max recent unblocks", "Type" => "text", "Size" => "5", "Description" => "Max unblocks a user can requests in the time period specified in the Minute interval option.", "Default" => "5", ),
