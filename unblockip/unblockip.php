@@ -1,6 +1,10 @@
 <?php
+// WHMCS Firewall Unblocker - unblockip.php
+// https://github.com/LEOPARD-host/WHMCS-Firewall-Unblocker-CSF
+
 use Illuminate\Database\Capsule\Manager as Capsule;	
 require_once  dirname(__FILE__) . "/functions.php";
+
 
 function unblockip_config() {
 	$configarray = array(
@@ -10,14 +14,15 @@ function unblockip_config() {
 		"author" => "The Network Crew Pty Ltd",
 		"language" => "english",
 		"fields" => array(
-			"option1" => array ("FriendlyName" => "Max recent unblocks", "Type" => "text", "Size" => "5", "Description" => "Max unblocks a user can requests in the time period specified in the Minute interval option.", "Default" => "5", ),
-			"option2" => array ("FriendlyName" => "Minute interval", "Type" => "text", "Size" => "5", "Description" => "How may minutes does a client need to wait before the max unblocks is reset.", "Default" => "5"),
+			"option1" => array ("FriendlyName" => "Limit (Unblocks in Interval)", "Type" => "text", "Size" => "5", "Description" => "Max number of Unblocks a Client can do in the Interval.", "Default" => "5", ),
+			"option2" => array ("FriendlyName" => "Limit Interval (in Minutes)", "Type" => "text", "Size" => "5", "Description" => "How many minutes should elapse before the Limit is reset.", "Default" => "5"),
 			"option3" => array ("FriendlyName" => "Automatically check for an IP Block upon Client Login and Unblock the IP Address.", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
 			"option5" => array ("FriendlyName" => "Automatically check for an IP Block upon Client Login but do NOT Unblock the IP", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
-			"option4" => array ("FriendlyName" => "Do not allow clients to Unblock IP Addresses with Do Not Delete in the deny comment", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "", ),
+			"option4" => array ("FriendlyName" => "Do not allow clients to Unblock IPs with Do Not Delete in the deny comment", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "", ),
 		));
 	return $configarray;
 }
+
 
 function unblockip_clientarea($vars) {
 	$modulelink = $vars['modulelink'];
@@ -100,13 +105,13 @@ function unblockip_output($vars) {
 	}
 
 	echo '
-	<h4>Query Servers for a Firewall Block against an IP.</h4>
+	<h4>Query Servers for a Firewall Block against an IP Address</h4>
 	<form action="'.$modulelink.'" method="POST">
 	<table class="form" width="80%" border="0" cellspacing="2" cellpadding="3">
-	<tr><td class="fieldlabel">Debug Mode</td><td class="fieldarea">
+	<tr><td class="fieldlabel">Debug?</td><td class="fieldarea">
 	<input type="checkbox" name="debug" value="1"></td>
 	</tr>
-	<tr><td class="fieldlabel">Server</td><td class="fieldarea">
+	<tr><td class="fieldlabel">Server Name</td><td class="fieldarea">
 
 	<select name="server_id">
 	<option value="all">Search all compatible Servers</option>
@@ -115,7 +120,6 @@ function unblockip_output($vars) {
 
 	$servers = Capsule::table('tblservers')->whereRaw("(type = 'cpanel' OR type='directadmin' or type = 'cpanelextended' ) and disabled = 0")->get();
 
-
 	foreach($servers as $server) {
 		echo "<option value='".$server->id ."'>" . $server->name . "</option>";	
 
@@ -123,7 +127,7 @@ function unblockip_output($vars) {
 	echo
 	'</select>
 	</td></tr>
-	<tr><td class="fieldlabel">IP Address</td><td class="fieldarea">
+	<tr><td class="fieldlabel">IP Address to Query</td><td class="fieldarea">
 	<input type="text" name="ip_address" size="60">
 	</td></tr>
 	</table>
@@ -131,7 +135,6 @@ function unblockip_output($vars) {
 	<input type="hidden" name="action" value="unblock">
 	<input type="submit" name="submit" value="Search and Unblock">
 	</form>';
-
 
 }
 

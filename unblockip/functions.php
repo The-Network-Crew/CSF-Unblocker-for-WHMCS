@@ -1,5 +1,10 @@
 <?php
+// WHMCS Firewall Unblocker - functions.php
+// https://github.com/LEOPARD-host/WHMCS-Firewall-Unblocker-CSF
+
 use Illuminate\Database\Capsule\Manager as Capsule;
+
+
 function unblock_whm_session($ipaddress,$username,$token, $authmethod) {
 	global  $attachments_dir;
 	require_once  dirname(__FILE__) . "/xmlapi.php";
@@ -17,7 +22,6 @@ function unblock_whm_session($ipaddress,$username,$token, $authmethod) {
 
 		$session = $xmlapi->xmlapi_query("create_user_session", array("user" => $username, "service" => "whostmgrd",'api.version'=>1));
 		$session = json_decode($session);
-
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -37,20 +41,22 @@ function unblock_whm_session($ipaddress,$username,$token, $authmethod) {
 	}
 }
 
+
 function remove_whm_session_cookie() {
 	global $attachments_dir;
 	$result = unlink($attachments_dir  . "/" . $_SESSION['whm_session_token']["cookie"]);
 }  
 
+
 function unblock_cphulk($server_ip, $whmuser, $whmauth, $authmethod,$ip_address, $srv_secure) {
-	
+
 	if ($srv_secure == "on") {
 		$port = 2087;
 	}
 	else {
 		$port = 2086;
 	}
-	
+
 	$results = excecute_whm_csf_command("https://" . $_SESSION['whm_session_token']["hostname"] . ":" . $port . "/" . $_SESSION['whm_session_token']["token"] ."/json-api/flush_cphulk_login_history_for_ips?api.version=1&ip=" . $ip_address,$whmuser, $whmauth, $authmethod, $server_ip);
 
 	$results = json_decode($results);
@@ -62,6 +68,7 @@ function unblock_cphulk($server_ip, $whmuser, $whmauth, $authmethod,$ip_address,
 		return false;
 	}  
 }
+
 
 function excecute_whm_csf_command($url,$whmuser, $whmauth, $authmethod, $ipaddress) {
 	try {	
@@ -80,7 +87,6 @@ function excecute_whm_csf_command($url,$whmuser, $whmauth, $authmethod, $ipaddre
 				error_log("curl_exec threw error \"" . curl_error($curl) . "\" for $url");
 			}
 			curl_close($curl);
-			
 
 			return $r;	    
 		}
@@ -102,9 +108,10 @@ function excecute_whm_csf_command($url,$whmuser, $whmauth, $authmethod, $ipaddre
 		}
 	}
 	catch (Exception $e) {
-		
+
 	}
 }
+
 
 function search_for_ip($ip, $url, $whmuser, $whmauth, $authmethod, $_lang, $srv_ip, $debug = false) {
 	$reason = "";
@@ -138,7 +145,6 @@ function search_for_ip($ip, $url, $whmuser, $whmauth, $authmethod, $_lang, $srv_
 		else {
 			$reason = trim($matches[1]);
 		}
-		
 	}
 	
 	if (strpos($reason,"sshd") !== false ) {
@@ -169,7 +175,6 @@ function search_for_ip($ip, $url, $whmuser, $whmauth, $authmethod, $_lang, $srv_
 		$reason = $_lang["PERMBLOCK"];
 	}
 
-
 	// filter out allowed ips
 	$matches = array();
 	$pattern = '/csf.allow/s';
@@ -183,9 +188,11 @@ function search_for_ip($ip, $url, $whmuser, $whmauth, $authmethod, $_lang, $srv_
 	}
 }
 
+
 function number_of_recent_unblocks($whmcs_client_id, $unblock_interval) {
 	return Capsule::table('tblactivitylog')->where('userid', $whmcs_client_id)->whereRaw('(date between DATE_SUB(now(), interval '. $unblock_interval .' minute) and now())')->whereRaw('description LIKE \'%Unblocked the IP Address%\'')->count();
 }
+
 
 function process_request($ip,$whmcs_client_id, $max_recent_blocks, $unblock_interval, $from_hook, $vars, $unblock = true) {
 
@@ -202,9 +209,9 @@ function process_request($ip,$whmcs_client_id, $max_recent_blocks, $unblock_inte
 	
 	if (number_of_recent_unblocks($whmcs_client_id, $unblock_interval) < $max_recent_blocks) {
 		$servers = Capsule::table('tblservers')->select(["tblservers.ipaddress","tblservers.username","tblservers.password","tblservers.accesshash","tblservers.name","tblservers.secure","tblservers.type"])->join("tblhosting","tblservers.id","=","tblhosting.server")->where('tblhosting.userid', $whmcs_client_id)->whereRaw("(tblservers.type = 'cpanel' or tblservers.type='directadmin' or tblservers.type='cpanelextended') and tblservers.disabled = 0 and tblhosting.domainstatus = 'Active'")->distinct()->get();
-		
+
 		foreach($servers as $server) {
-			
+
 			$srv_ip = $server->ipaddress;
 			$srv_user = $server->username;
 			$srv_pass = $server->password;
@@ -232,7 +239,7 @@ function process_request($ip,$whmcs_client_id, $max_recent_blocks, $unblock_inte
 				else {	    
 					$_SESSION['whm_session_token']  = unblock_whm_session($srv_ip,$srv_user,$authhash, $authmethod);
 					$url = "https://" . $_SESSION['whm_session_token']["hostname"] . ":2087/" . $_SESSION['whm_session_token']["token"] . "/cgi/configserver/csf.cgi";
-					
+
 				}
 			} else {
 				if ($srv_type == "directadmin") {
@@ -241,15 +248,15 @@ function process_request($ip,$whmcs_client_id, $max_recent_blocks, $unblock_inte
 				else {	    
 					$_SESSION['whm_session_token']  = unblock_whm_session($srv_ip,$srv_user,$authhash, $authmethod);
 					$url = "http://" . $_SESSION['whm_session_token']["hostname"] . ":2086/" .$_SESSION['whm_session_token']["token"] . "/cgi/configserver/csf.cgi";
-					
+
 				}
 			}
-			
+
 			if ( $_SESSION['whm_session_token'] === false || !$auth_valid) {
 				$errors = $errors . $lang_file['cannot_connect']. " ". $server->name; 
 				$auth_valid = false;
 			}
-			
+
 			if ($auth_valid) {
 				
 				if ($srv_type != "directadmin") {
@@ -277,7 +284,7 @@ function process_request($ip,$whmcs_client_id, $max_recent_blocks, $unblock_inte
 							$query_url = $url.'?action=kill&ip='.$ip;
 							$data = excecute_whm_csf_command($query_url, $srv_user, $authhash, $authmethod, $srv_ip);
 						}
-						
+
 
 						$alerts = $alerts . $lang_file['ip_was_removed'] .  $server->name . "<br>" . $lang_file['reason']. $reason . "<br>";
 						logActivity("Unblocked the IP Address " . $ip . " from " . $server->name . " - Reason: " . $reason . " - User ID: ".$whmcs_client_id);
@@ -304,7 +311,8 @@ function process_request($ip,$whmcs_client_id, $max_recent_blocks, $unblock_inte
 	$smartyvalues["errors"] = $errors;
 	$smartyvalues["alerts"] = $alerts;
 	$smartyvalues["unblocked_ip"] = $unblocked_ip;
-	
+
 	return $smartyvalues;
 }
+
 ?>
