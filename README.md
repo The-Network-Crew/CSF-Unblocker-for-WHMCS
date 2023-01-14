@@ -9,13 +9,36 @@ This extension provides the ability to self-service Unblock IPs from within WHMC
 
 ### Problems that need resolving:
 
-- **Reports "Not blocked" when it is in fact blocked on-server**
+- Client Area Output doesn't have necessary tokens; made elsewhere
 - cPanel XML-API (deprecated 2017-2018) used, consider JSON-API
 
 ### Documentation for old/new APIs:
 
 - https://github.com/CpanelInc/xmlapi-php
 - https://api.docs.cpanel.net/whm/introduction
+
+### Client Area - problematic code:
+
+The breadcrumb, template, and other keys that you need to display the client area output are returned by the `unblockip_clientarea()` function in the `unblockip.php` file. These keys are returned as an array which includes 'pagetitle', 'breadcrumb', 'templatefile', 'requirelogin', and 'vars'. These keys are used by the WHMCS system to render the client area output.
+
+In order to fix the issue with the missing keys, you need to make sure that the `unblockip_show()` function in the `hooks.php` file is calling the `unblockip_clientarea()` function in the `unblockip.php` file, and that it is passing the correct variables to it. Once that is done, you can use the returned array of keys to display the client area output.
+
+ie. 
+
+    function unblockip_show($vars) {
+        search_for_ip_block($vars);
+        $returned_values = unblockip_clientarea($vars); // call the unblockip_clientarea function and store the returned value
+        if (!empty($returned_values)) {
+            $smarty = new Smarty();
+            $smarty->assign($returned_values);
+            $smarty->caching = false;
+            $smarty->compile_dir = $GLOBALS['templates_compiledir'];
+            $output = $smarty->fetch(dirname(__FILE__) . '/templates/clientareaoutput.tpl');  
+        } else {
+            $output = "";
+        }
+        return $output;
+    }
 
 ### Feature sets for the original:
 
