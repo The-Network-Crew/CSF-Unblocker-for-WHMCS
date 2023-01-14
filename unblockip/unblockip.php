@@ -10,7 +10,7 @@ function unblockip_config() {
 	$configarray = array(
 		"name" => "Firewall Unblocker",
 		"description" => "Allows clients to Unblock an IP that has been blocked on a Server by CSF.",
-		"version" => "2.17",
+		"version" => "2.20",
 		"author" => "The Network Crew Pty Ltd",
 		"language" => "english",
 		"fields" => array(
