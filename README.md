@@ -2,12 +2,17 @@
 
 This extension provides the ability to self-service Unblock IPs from within WHMCS.
 
+### Pre-requisites for usage:
+
+- software-ConfigServer-csf (Reseller ACL in WHM needs this)
+- whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK (/etc/csf/csf.resellers)
+
 ### Problems that need resolving:
 
-- cPanel XML-API (deprecated 2017-2018) used, move to JSON-API
-- Fatal errors during last attempts at using the Addon Module
+- **Reports "Not blocked" when it is in fact blocked on-server**
+- cPanel XML-API (deprecated 2017-2018) used, consider JSON-API
 
-### Documentation for old/nsw APIs:
+### Documentation for old/new APIs:
 
 - https://github.com/CpanelInc/xmlapi-php
 - https://api.docs.cpanel.net/whm/introduction
@@ -16,7 +21,7 @@ This extension provides the ability to self-service Unblock IPs from within WHMC
 
 - Allow your customers to easily unblock their ip from your cPanel and DirectAdmin servers CSF firewall.
 - Checks for an IP Block across every cPanel and DirectAdmin server that is associated with an active service of the WHMCS Client.
-- Uses a smarty template filet to easily change look/feel of the addon.
+- Uses a smarty template file to easily change look/feel of the addon.
 - Only shows the link to the module in your menu if the client has an active cPanel service.
 - Displays the csf log entry so the client can see the reason why the ip was blocked.
 - Logs successful unblocks in the whmcs client log.
