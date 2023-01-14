@@ -4,17 +4,17 @@ require_once  dirname(__FILE__) . "/functions.php";
 
 function unblockip_config() {
 	$configarray = array(
-		"name" => "UnBlockIp",
-		"description" => "Allows clients to unblock an IP that has been blocked on a cPanel or DirectAdmin server by CSF.",
+		"name" => "Firewall Unblocker",
+		"description" => "Allows clients to Unblock an IP that has been blocked on a Server by CSF.",
 		"version" => "2.17",
-		"author" => "ServerPing.net",
+		"author" => "The Network Crew Pty Ltd",
 		"language" => "english",
 		"fields" => array(
 			"option1" => array ("FriendlyName" => "Max recent unblocks", "Type" => "text", "Size" => "5", "Description" => "Max unblocks a user can requests in the time period specified in the Minute interval option.", "Default" => "5", ),
 			"option2" => array ("FriendlyName" => "Minute interval", "Type" => "text", "Size" => "5", "Description" => "How may minutes does a client need to wait before the max unblocks is reset.", "Default" => "5"),
-			"option3" => array ("FriendlyName" => "Automatically check for an IP Block upon client login and unblock the ip address.", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
-			"option5" => array ("FriendlyName" => "Automatically check for an IP Block upon client login but do not unblock the ip", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
-			"option4" => array ("FriendlyName" => "Do not allow clients to remove ip addresses with do not delete in the deny comment", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "", ),
+			"option3" => array ("FriendlyName" => "Automatically check for an IP Block upon Client Login and Unblock the IP Address.", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
+			"option5" => array ("FriendlyName" => "Automatically check for an IP Block upon Client Login but do NOT Unblock the IP", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "",),
+			"option4" => array ("FriendlyName" => "Do not allow clients to Unblock IP Addresses with Do Not Delete in the deny comment", "Type" => "yesno", "Size" => "5", "Description" => "", "Default" => "", ),
 		));
 	return $configarray;
 }
@@ -33,24 +33,24 @@ function unblockip_clientarea($vars) {
 	if ($unblock_interval == 0) { 
 		$unblock_interval = 5;
 	}
-	
+
 	$whmcs_client_id = (int)$_SESSION['uid'];
 	$templatefile = "unblockip";
-	
+
 	if ($whmcs_client_id) { 
 		if ($_POST['action'] == "remove_ip_block") {
 			check_token();
 			$smartyvalues = process_request($_POST['ip_address'], $whmcs_client_id, $max_unblocks, $unblock_interval, false, $vars);
 		}
-		
+
 	}
 	else {
 		return false;
 	}
 	$smartyvalues["modulelink"] =  $modulelink;
-	
+
 	$smartyvalues["unblock_lang"] = $vars['_lang'];
-	
+
 	return array(
 		'pagetitle' => $lang_file["header"],
 		'breadcrumb' => array($modulelink=>$lang_file["header"]),
@@ -58,18 +58,18 @@ function unblockip_clientarea($vars) {
         'requirelogin' => true, # or false
         'vars' => $smartyvalues,
       );
-	
+
 }
 
 
 function unblockip_output($vars) {
 	$modulelink = $vars['modulelink'];
-	
+
 	if ($_POST['action'] == "unblock") {
-		
+
 		if (!filter_var($_POST['ip_address'], FILTER_VALIDATE_IP)) {
 			echo '<div class="errorbox">';
-			echo 'Invalid IP address <br>';
+			echo 'Invalid IP Address <br>';
 			echo '</div>';
 		}
 		else {
@@ -100,7 +100,7 @@ function unblockip_output($vars) {
 	}
 
 	echo '
-	<h4>Search cPanel and DirectAdmin servers for a csf firewall block.</h4>
+	<h4>Query Servers for a Firewall Block against an IP.</h4>
 	<form action="'.$modulelink.'" method="POST">
 	<table class="form" width="80%" border="0" cellspacing="2" cellpadding="3">
 	<tr><td class="fieldlabel">Debug Mode</td><td class="fieldarea">
@@ -109,16 +109,16 @@ function unblockip_output($vars) {
 	<tr><td class="fieldlabel">Server</td><td class="fieldarea">
 
 	<select name="server_id">
-	<option value="all">Search all active cPanel and DirectAdmin Servers</option>
+	<option value="all">Search all compatible Servers</option>
 
 	';
-	
+
 	$servers = Capsule::table('tblservers')->whereRaw("(type = 'cpanel' OR type='directadmin' or type = 'cpanelextended' ) and disabled = 0")->get();
-	
-	
+
+
 	foreach($servers as $server) {
 		echo "<option value='".$server->id ."'>" . $server->name . "</option>";	
-		
+
 	}
 	echo
 	'</select>
@@ -129,10 +129,10 @@ function unblockip_output($vars) {
 	</table>
 	<br>
 	<input type="hidden" name="action" value="unblock">
-	<input type="submit" name="submit" value="Search for and Unblock IP">
+	<input type="submit" name="submit" value="Search and Unblock">
 	</form>';
 
-	
+
 }
 
 
@@ -141,7 +141,7 @@ function process_admin_request($ip, $server_id, $vars, $debug) {
 	$alerts = "";
 	$block_found = false;
 	$results = array();
-	
+
 	if ($server_id == "all") {
 		$server_id = "";
 	}
@@ -151,14 +151,14 @@ function process_admin_request($ip, $server_id, $vars, $debug) {
 
 	$servers = Capsule::table('tblservers')->whereRaw("(type = 'cpanel' or type='directadmin' or type='cpanelextended') and disabled = 0 " . $server_id)->get();
 	foreach($servers as $server) {
-		
+
 		$srv_ip = $server->ipaddress;
 		$srv_user = $server->username;
 		$srv_pass = $server->password;
 		$srv_hash = $server->accesshash;
 		$srv_secure = $server->secure;
 		$srv_type = $server->type;
-		
+
 		$auth_valid = false;
 		if ($srv_hash) {
 			$authhash = preg_replace("'(\r|\n)'","",$srv_hash);
@@ -172,7 +172,7 @@ function process_admin_request($ip, $server_id, $vars, $debug) {
 		} else {
 			$errors = $errors . "Cannot connect to ". $server->name;
 		}
-		
+
 		if ($srv_secure) {
 			if ($srv_type == "directadmin") {
 				$url = "https://$srv_ip:2222/CMD_PLUGINS_ADMIN/csf/index.html";
@@ -191,12 +191,12 @@ function process_admin_request($ip, $server_id, $vars, $debug) {
 				$url = "http://" . $_SESSION['whm_session_token']['hostname'] . ":2086/" .$_SESSION['whm_session_token']["token"] . "/cgi/configserver/csf.cgi";
 			}
 		}
-		
+
 		if ( $_SESSION['whm_session_token'] === false || !$auth_valid) {
 			$errors = $errors . "Cannot connect to ". $server->name; 
 			$auth_valid = false;
 		}
-		
+
 		if ($auth_valid) {
 			if ($srv_type != "directadmin") {
 				if (unblock_cphulk($srv_ip, $srv_user, $authhash, $authmethod,$ip,$srv_secure)) {
