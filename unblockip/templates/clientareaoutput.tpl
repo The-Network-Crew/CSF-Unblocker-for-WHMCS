@@ -1,11 +1,11 @@
-{if !empty($donotautounblock) && $donotautounblock != "on"}
+{if $donotautounblock != "on"}
 <div class="alert alert-danger textcenter">
     <p><strong>{$unblock_lang.ip_block_auto_removed}</strong></p>
     <p>
     {$unblock_lang.detailed_block_information}: <br>
     {$unblockip_alerts}</p>
 </div>
-{if !empty($unblockip_errors)}
+{if $unblockip_errors}
 <div class="alert alert-danger textcenter">
     <p><strong>{$unblock_lang.ip_auto_block_failed}<br>{$unblock_lang.please_open_a_support_ticket}</strong></p>
 </div>
@@ -21,7 +21,7 @@
     </form>    
 </div>
 {/if}
-{if !empty($unblockip_errors)}
+{if $unblockip_errors}
 <div class="alert alert-error textcenter">
       <p><strong>{$unblock_lang.ip_address_is_blocked}<br>{$unblock_lang.please_open_a_support_ticket}</strong></p>
 </div>

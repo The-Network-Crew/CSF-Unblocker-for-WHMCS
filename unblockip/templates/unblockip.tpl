@@ -1,13 +1,14 @@
-{if !empty($alerts)}
+{if $alerts}
 <div class="alert alert-success textcenter">
     <p>{$alerts}</p>
 </div>
 {/if}
-{if !empty($errors)}
+{if $errors}
 <div class="alert alert-danger textcenter">
     <p>{$errors}</p>
 </div>
 {/if}
+
 <form name='ipaddresscheck' method='POST' action='{$modulelink}'>
 <div class="panel panel-default">
   <div class="panel-heading"><h3 class="panel-title">{$unblock_lang.address_to_check}</h3></div>
