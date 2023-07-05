@@ -2,19 +2,26 @@
 
 This extension provides the ability to self-service Unblock IPs from within WHMCS.
 
-### Pre-requisites for Usage:
+## 🎯 MODULE SYSTEM REQUIREMENTS 🎯
+
+- Server Integrated OK
+- WHMCS v8.x latest
+- CSF 14.x latest
+- PHP# latest
+
+## 🐛 GOTCHAS TO CHECK BEFOREHAND 🐛
 
 - `software-ConfigServer-csf` (Reseller ACL in WHM needs this enabled)
 - `whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK` (/etc/csf/csf.resellers)
 
-### Installing the WHMCS Module:
+## ✅ INSTALLING THE WHMCS MODULE ✅
 
 - Download the latest version of the module from the repository
 - Upload the unblockip/ folder into WHMCS_WEBROOT/modules/addons/
 - Visit WHMCS Admin > Settings > Addon Modules > enable the Module
 - From there, it will be visible in the Admin and Client interfaces
 
-### What the Module does for you:
+## ⚙️ WHAT THE MODULE DOES FOR YOU ⚙️
 
 - Allow your customers to easily unblock their IP from your cPanel and DirectAdmin servers' CSF firewall.
 - Checks for an IP Block across every cPanel and DirectAdmin server that is associated with an active service of the WHMCS Client.
@@ -27,9 +34,8 @@ This extension provides the ability to self-service Unblock IPs from within WHMC
 - Automatically check for and remove an IP Block when upon client login to WHMCS (Optional, disabled by default).
 - Easy installation!
 
-### System Requirements:
+## 🏢 DEVELOPMENT 🏢
 
-- Server Integrated OK
-- WHMCS v8.x latest
-- CSF 14.x latest
-- PHP# latest
+[The Network Crew Pty Ltd](https://thenetworkcrew.com.au)
+
+
