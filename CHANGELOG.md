@@ -3,7 +3,7 @@ All notable changes to CSF Unblocker for WHMCS will be documented in this file.
 
 ## [2.20] - 2023-01-14
 
-https://github.com/LEOPARD-host/CSF-Unblocker-for-WHMCS/commits/v2.20
+https://github.com/The-Network-Crew/CSF-Unblocker-for-WHMCS/commits/v2.20
 
 ### Added
 - CHANGELOG.md file added to the repository
@@ -20,4 +20,4 @@ https://github.com/LEOPARD-host/CSF-Unblocker-for-WHMCS/commits/v2.20
 
 Last available version via previous authors.
 
-https://github.com/LEOPARD-host/CSF-Unblocker-for-WHMCS/tree/main/unblockip
+https://github.com/The-Network-Crew/CSF-Unblocker-for-WHMCS/tree/main/unblockip
