@@ -1,41 +1,38 @@
-# (WHMCS Addon Module) Firewall Unblocker for CSF
+# Firewall Unblocker (for CSF & WHMCS)
 
 This extension provides the ability to self-service Unblock IPs from within WHMCS.
 
-## 🎯 MODULE SYSTEM REQUIREMENTS 🎯
+## 🎯 (MODULE) System Requirements 🎯
 
 - Server Integrated OK
 - WHMCS v8.x latest
 - CSF 14.x latest
 - PHP# latest
 
-## 🐛 GOTCHAS TO CHECK BEFOREHAND 🐛
+## 🐛 (MODULE) Permission Requirements 🐛
 
-- `software-ConfigServer-csf` (Reseller ACL in WHM needs this enabled)
-- `whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK` (/etc/csf/csf.resellers)
+- `software-ConfigServer-csf` (WHM > Reseller ACL > needs this enabled)
+- `whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK` (within /etc/csf/csf.resellers)
 
-## ✅ INSTALLING THE WHMCS MODULE ✅
+## ✅ (INSTALL) How to Install & Prepare ✅
 
-- Download the latest version of the module from the repository
-- Upload the unblockip/ folder into WHMCS_WEBROOT/modules/addons/
-- Visit WHMCS Admin > Settings > Addon Modules > enable the Module
-- From there, it will be visible in the Admin and Client interfaces
+- Download the latest version of the module
+- Upload the module into WHMCS_WEBROOT/modules/addons/
+- Visit WHMCS Admin > Settings > Addon Modules > enable it
+- From there, it will be visible in the Admin & Client GUIs
 
-## ⚙️ WHAT THE MODULE DOES FOR YOU ⚙️
+## ⚙️ (FAQ) What can this module do? ⚙️
 
-- Allow your customers to easily unblock their IP from your cPanel and DirectAdmin servers' CSF firewall.
-- Checks for an IP Block across every cPanel and DirectAdmin server that is associated with an active service of the WHMCS Client.
-- Uses a Smarty template file to easily change look/feel of the addon.
-- Only shows the link to the module in your menu if the client has an active cPanel service.
-- Displays the CSF log entry so the client can see the reason why the IP was blocked.
-- Logs successful Unblocks in the WHMCS client log.
-- For added security, you can set maximum number of Unblocks a client can issue in a configurable minute time period.
-- Quickly search for and Unblock an IP Address from all active cPanel servers from the WHMCS admin area.
-- Automatically check for and remove an IP Block when upon client login to WHMCS (Optional, disabled by default).
-- Easy installation!
+- Allow your customers to unblock their IP from your server's CSF firewall.
+- Checks for IP Block on all cP/DA servers associated with an active client service.
+- Uses a Smarty template file so you can easily change look/feel of the addon module.
+- Only shows the link to the module in your menu if the client has an active cPanel.
+- Displays the CSF log entry so the client can see the reason for the block.
+- Logs successful unblocks in the WHMCS client log for potential review.
+- Set max number of unblocks a client can do in a configured time period.
+- Admin GUI: Quickly search for and remove blocks across all cPanel servers.
+- Optional: Auto-check for & remove a block when client logs in to WHMCS.
 
-## 🏢 DEVELOPMENT 🏢
+## 🏢 (TNC) Links out to TNC & Co. 🏢
 
 [The Network Crew Pty Ltd](https://thenetworkcrew.com.au)
-
-
