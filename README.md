@@ -35,4 +35,4 @@ This extension provides the ability to self-service Unblock IPs from within WHMC
 
 ## 🏢 (TNC) Links out to TNC & Co. 🏢
 
-[The Network Crew Pty Ltd](https://thenetworkcrew.com.au)
+[The Network Crew Pty Ltd](https://tnc.works)
