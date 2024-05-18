@@ -14,7 +14,6 @@ It supports CSF - ConfigServer Security & Firewall, typically used on cPanel+WHM
 **Server Integrated OK, with:**
 
 - WHMCS v8.x latest
-- Smarty tags = ON
 - CSF 14.x latest
 - PHP latest
 
@@ -29,7 +28,6 @@ It supports CSF - ConfigServer Security & Firewall, typically used on cPanel+WHM
 - Upload the module into `WHMCS_WEBROOT/modules/addons/`
 - Visit WHMCS Admin > Settings > Addon Modules > enable it
 - From there, it will be visible in the Admin & Client GUIs
-- If it's visible in Admin not Client, check Smarty tags = ON
 
 ## ⚙️ (FAQ) What can this module do?
 
