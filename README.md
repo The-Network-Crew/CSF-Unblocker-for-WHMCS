@@ -4,9 +4,15 @@ This extension provides the ability to self-service Unblock IPs from within WHMC
 
 It supports CSF - ConfigServer Security & Firewall, typically used on cPanel+WHM.
 
+**Locations of the Module Interfaces:**
+
+- Admin GUI: Addons > Firewall Unblocker
+- Client GUI: Support > Firewall Unblocker
+
 ## 🎯 (Module) System Requirements
 
-- Server Integrated OK
+**Server Integrated OK, with:**
+
 - WHMCS v8.x latest
 - Smarty tags = ON
 - CSF 14.x latest
