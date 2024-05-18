@@ -8,20 +8,22 @@ It supports CSF - ConfigServer Security & Firewall, typically used on cPanel+WHM
 
 - Server Integrated OK
 - WHMCS v8.x latest
+- Smarty tags = ON
 - CSF 14.x latest
-- PHP# latest
+- PHP latest
 
 ## 📋 (Module) Permission Requirements
 
-- `software-ConfigServer-csf` (WHM > Reseller ACL > needs this enabled)
-- `whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK` (within /etc/csf/csf.resellers)
+- (WHM > Reseller ACL > enable this, so it appears) `software-ConfigServer-csf`
+- (In /etc/csf/csf.resellers so it works) `whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK`
 
 ## ✅ (Install) How to Upload & Config
 
 - Download the latest version of the module
-- Upload the module into WHMCS_WEBROOT/modules/addons/
+- Upload the module into `WHMCS_WEBROOT/modules/addons/`
 - Visit WHMCS Admin > Settings > Addon Modules > enable it
 - From there, it will be visible in the Admin & Client GUIs
+- If it's visible in Admin not Client, check Smarty tags = ON
 
 ## ⚙️ (FAQ) What can this module do?
 
@@ -37,6 +39,6 @@ It supports CSF - ConfigServer Security & Firewall, typically used on cPanel+WHM
 
 ## 🏢 Corporate Sites: TNC & Merlot Digital
 
-**The Network Crew** :: https://tnc.works
+**The Network Crew Pty Ltd** :: https://tnc.works
 
 **Merlot Digital** :: https://merlot.digital
