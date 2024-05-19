@@ -19,8 +19,17 @@ It supports CSF - ConfigServer Security & Firewall, typically used on cPanel+WHM
 
 ## 📋 (Module) Permission Requirements
 
-- (WHM > Reseller ACL > enable this, so it appears) `software-ConfigServer-csf`
-- (In /etc/csf/csf.resellers so it works) `whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK`
+#### WHM > Reseller ACL
+
+Make sure the Reseller has access to this function:<br>
+`software-ConfigServer-csf` (so it appears in WHM)
+
+#### /etc/csf/csf.resellers
+
+Add this line, replacing whmuser with the Reseller cP:<br>
+`whmuser:0:USE,ALLOW,DENY,GREP,UNBLOCK` (so it works)
+
+Optionally, you can change 0 to 1, to be alerted on-action.
 
 ## ✅ (Install) How to Upload & Config
 
